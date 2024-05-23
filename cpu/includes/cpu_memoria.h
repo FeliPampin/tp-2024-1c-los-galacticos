@@ -1,4 +1,4 @@
-#include "c_gestor.h"
+// #include "c_gestor.h"
 
 
-void atender_cpu_memoria();
+// void atender_cpu_memoria();

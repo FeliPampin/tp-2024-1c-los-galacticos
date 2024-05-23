@@ -14,12 +14,12 @@ extern int fd_cpu_dispatch;
 extern int fd_cpu_interrupt;
 extern int fd_cpu_kernel;
 
-extern char* PUERTO_ESCUCHA;
+extern int PUERTO_ESCUCHA;
 extern char* IP_MEMORIA;
-extern char* PUERTO_MEMORIA;
+extern int PUERTO_MEMORIA;
 extern char* IP_CPU;
-extern char* PUERTO_CPU_DISPATCH;
-extern char* PUERTO_CPU_INTERRUPT;
+extern int PUERTO_CPU_DISPATCH;
+extern int PUERTO_CPU_INTERRUPT;
 extern char* ALGORITMO_PLANIFICACION;
 extern int QUANTUM;
 extern char** RECURSOS;

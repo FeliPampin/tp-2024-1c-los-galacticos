@@ -15,8 +15,8 @@ extern int fd_kernel_dispatch;
 extern int fd_kernel_interrupt;
 
 extern char* IP_MEMORIA;
-extern char* PUERTO_MEMORIA;
-extern char* PUERTO_ESCUCHA_DISPATCH;
-extern char* PUERTO_ESCUCHA_INTERRUPT;
+extern int PUERTO_MEMORIA;
+extern int PUERTO_ESCUCHA_DISPATCH;
+extern int PUERTO_ESCUCHA_INTERRUPT;
 extern int CANTIDAD_ENTRADAS_TLB;
 extern char* ALGORITMO_TLB;

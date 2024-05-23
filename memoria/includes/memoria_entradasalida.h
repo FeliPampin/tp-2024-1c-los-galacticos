@@ -1,3 +1,3 @@
-#include "m_gestor.h"
+// #include "m_gestor.h"
 
-void atender_memoria_entradasalida();
+// void atender_memoria_entradasalida();

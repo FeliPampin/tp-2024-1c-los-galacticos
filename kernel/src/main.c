@@ -22,25 +22,25 @@ int main(void) {
 	//esperar conexion de entradasalida
 	fd_entradasalida = esperar_cliente(fd_kernel, kernel_logger, "Entrada y salida");
 
-	//ATENDER MEMORIA
-	pthread_t hilo_memoria;
-	pthread_create(&hilo_memoria, NULL, (void*)atender_kernel_memoria, NULL);
-	pthread_detach(hilo_memoria);
+	// //ATENDER MEMORIA
+	// pthread_t hilo_memoria;
+	// pthread_create(&hilo_memoria, NULL, (void*)atender_kernel_memoria, NULL);
+	// pthread_detach(hilo_memoria);
 	
-	//ATENDER CPU DISPATCH
-	pthread_t hilo_cpu_dispatch;
-	pthread_create(&hilo_cpu_dispatch, NULL, (void*)atender_kernel_dispatch, NULL);
-	pthread_detach(hilo_cpu_dispatch);
+	// //ATENDER CPU DISPATCH
+	// pthread_t hilo_cpu_dispatch;
+	// pthread_create(&hilo_cpu_dispatch, NULL, (void*)atender_kernel_dispatch, NULL);
+	// pthread_detach(hilo_cpu_dispatch);
 
-	//ATENDER CPU INTERRUPT
-	pthread_t hilo_cpu_interrupt;
-	pthread_create(&hilo_cpu_interrupt, NULL, (void*)atender_kernel_interrupt, NULL);
-	pthread_detach(hilo_cpu_interrupt);
+	// //ATENDER CPU INTERRUPT
+	// pthread_t hilo_cpu_interrupt;
+	// pthread_create(&hilo_cpu_interrupt, NULL, (void*)atender_kernel_interrupt, NULL);
+	// pthread_detach(hilo_cpu_interrupt);
 
-	//ATENDER ENTRADA Y SALIDA
-	pthread_t hilo_entradasalida;
-	pthread_create(&hilo_entradasalida, NULL, (void*)atender_kernel_entradasalida, NULL);
-	pthread_join(hilo_entradasalida, NULL);
+	// //ATENDER ENTRADA Y SALIDA
+	// pthread_t hilo_entradasalida;
+	// pthread_create(&hilo_entradasalida, NULL, (void*)atender_kernel_entradasalida, NULL);
+	// pthread_join(hilo_entradasalida, NULL);
 
 	return EXIT_SUCCESS;
 }

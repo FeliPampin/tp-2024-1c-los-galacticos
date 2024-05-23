@@ -17,25 +17,25 @@ typedef enum
 	PAQUETE
 }op_code;
 
-typedef struct
-{
-	int size;
-	void* stream;
-} t_buffer;
+// typedef struct
+// {
+// 	int size;
+// 	void* stream;
+// } t_buffer;
 
-typedef struct
-{
-	op_code codigo_operacion;
-	t_buffer* buffer;
-} t_paquete;
+// typedef struct
+// {
+// 	op_code codigo_operacion;
+// 	t_buffer* buffer;
+// } t_paquete;
 
 
 
 
 
 void decir_hola(char* quien);
-int crear_conexion(char *ip, char* puerto);
-int iniciar_servidor(char* puerto, t_log* un_log, char* mensaje_servidor);
+int crear_conexion(char *ip, int puerto);
+int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor);
 int esperar_cliente(int socket_servidor, t_log* un_log,char* msj);
-int recibir_operacion(int socket_cliente);
+// int recibir_operacion(int socket_cliente);
 #endif

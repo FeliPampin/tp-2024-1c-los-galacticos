@@ -1,3 +1,3 @@
-#include "k_gestor.h"
+// #include "k_gestor.h"
 
-void atender_kernel_dispatch();
+// void atender_kernel_dispatch();

@@ -21,12 +21,12 @@ int fd_cpu_dispatch;
 int fd_cpu_interrupt;
 
 
-char* PUERTO_ESCUCHA;
+int PUERTO_ESCUCHA;
 char* IP_MEMORIA;
-char* PUERTO_MEMORIA;
+int PUERTO_MEMORIA;
 char* IP_CPU;
-char* PUERTO_CPU_DISPATCH;
-char* PUERTO_CPU_INTERRUPT;
+int PUERTO_CPU_DISPATCH;
+int PUERTO_CPU_INTERRUPT;
 char* ALGORITMO_PLANIFICACION;
 int QUANTUM;
 char** RECURSOS;

@@ -22,6 +22,7 @@ void inicializar_logs(){
 		perror("Algo ocurrio con el log");
 		exit(EXIT_FAILURE);
  	}
+	printf("\nLogs inicializados");
 }
 
 void inicializar_configs(){
@@ -38,7 +39,7 @@ void inicializar_configs(){
 	TAM_PAGINA = config_get_int_value(memoria_config,"TAM_PAGINA");
 	PATH_INSTRUCCIONES = config_get_string_value(memoria_config,"PATH_INSTRUCCIONES");
 	RETARDO_RESPUESTA= config_get_int_value(memoria_config,"RETARDO_RESPUESTA");
-
+	printf("\nConfigs inicializados");
 }
 
 void imprimir_configs(){
