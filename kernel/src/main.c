@@ -10,13 +10,18 @@ int main(void) {
 
 	//conectarse con memoria 
 	fd_memoria = crear_conexion(IP_MEMORIA, PUERTO_MEMORIA);
+	close(fd_memoria);
 
 	//conectarse con cpu 
 	fd_cpu_dispatch = crear_conexion(IP_CPU, PUERTO_CPU_DISPATCH);
 	log_info(kernel_logger,"fd_cpu_dispatch: %d",fd_cpu_dispatch);
+	close(fd_cpu_dispatch);
+
 	//log_info(kernel_logger, "Conexion con CPU DISPATCH exitosa");
 	fd_cpu_interrupt = crear_conexion(IP_CPU, PUERTO_CPU_INTERRUPT);
-	log_info(kernel_logger,"fd_cpu_interrupt: %d",fd_cpu_interrupt);
+	log_info(kernel_logger,"fd_cpu_interrupt: %d",fd_cpu_interrupt);\
+	close(fd_cpu_interrupt);
+
 	//log_info(kernel_logger, "Conexion con CPU INTERRUPT exitosa");
 
 	//esperar conexion de entradasalida

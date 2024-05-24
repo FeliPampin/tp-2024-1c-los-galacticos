@@ -17,9 +17,8 @@ int crear_conexion(char *ip, int puerto)
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
 
-	getaddrinfo(ip, puertostring, &hints, &server_info);
+	int err = getaddrinfo(ip, puertostring, &hints, &server_info);
 
-	int err = getaddrinfo("127.0.0.1", "4444", &hints, &server_info);
 	if (err != 0) {
         fprintf(stderr, "Error en getaddrinfo: %s\n", gai_strerror(err));
         return 1;
@@ -31,9 +30,14 @@ int crear_conexion(char *ip, int puerto)
                          server_info->ai_protocol);
 	// Ahora que tenemos el socket, vamos a conectarlo
 	
+	printf("\n\n%d\n\n", socket_cliente);
+
 	err = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
+
+	printf("\n\n%d\n\n", err);
+
 	if (err == -1) {
-    	perror("Error al conectar");
+    	perror("Error al conectaaar");
 	} else {
     	printf("Conexión exitosa\n");
 	}
@@ -44,10 +48,10 @@ int crear_conexion(char *ip, int puerto)
 }
 
 int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor)
-{
-	int err;
-	
+{	
 	struct addrinfo hints, *server_info;
+	char puertostring[11];
+	sprintf(puertostring, "%d", puerto); 
 
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
@@ -56,7 +60,8 @@ int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor)
 
 	// Creamos el socket de escucha del servidor
 
-	getaddrinfo(NULL, "4444", &hints, &server_info);
+	//getaddrinfo(NULL, "4444", &hints, &server_info);
+	int err = getaddrinfo(mensaje_servidor, puertostring, &hints, &server_info);
 
 	int socket_servidor = socket(server_info->ai_family,
                         server_info->ai_socktype,
@@ -73,9 +78,10 @@ int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor)
 
 	log_info(un_log, "resultado de listen: %d", err);
 
-	freeaddrinfo(server_info);
 	log_info(un_log,"SERVER: %s",mensaje_servidor);
 
+	freeaddrinfo(server_info);
+	
 	return socket_servidor;
 }
 

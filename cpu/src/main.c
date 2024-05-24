@@ -13,6 +13,7 @@ int main(void) {
 
     //CONECTAR COMO CLIENTE A MEMORIA
 	fd_memoria = crear_conexion(IP_MEMORIA, PUERTO_MEMORIA);
+	close (fd_memoria);
 
 	//ESPERAR CONEXION KERNEL DISPATCH
     log_info(cpu_logger, "ESPERANDO A KERNEL DISPATCH");

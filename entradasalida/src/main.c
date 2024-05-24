@@ -8,10 +8,12 @@ int main() {
     //conectarse con memoria 
     fd_memoria = crear_conexion(IP_MEMORIA, PUERTO_MEMORIA);
 	log_info(entradasalida_logger, "Conexion con MEMORIA exitosa");
+    close(fd_memoria);
 
     //conectarse con KERNEL
-	fd_entradasalida = crear_conexion(IP_KERNEL, PUERTO_KERNEL); //HAY ALGO RARO ACA, NO TENDRIA QUE SER FD_KERNEL, PQ ARRIBA DICE FD_MEMORIA
+	fd_kernel = crear_conexion(IP_KERNEL, PUERTO_KERNEL); //HAY ALGO RARO ACA, NO TENDRIA QUE SER FD_KERNEL, PQ ARRIBA DICE FD_MEMORIA
 	log_info(entradasalida_logger, "Conexion con KERNEL exitosa");
+    close(fd_kernel);
 
     // //ATENDER MEMORIA
     // pthread_t hilo_memoria;
