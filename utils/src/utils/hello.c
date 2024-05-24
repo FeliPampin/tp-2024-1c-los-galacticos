@@ -61,26 +61,43 @@ int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor)
 	// Creamos el socket de escucha del servidor
 
 	//getaddrinfo(NULL, "4444", &hints, &server_info);
-	int err = getaddrinfo(mensaje_servidor, puertostring, &hints, &server_info);
+	int err = getaddrinfo(NULL, puertostring, &hints, &server_info);
+
+	printf("\n\n%d\n\n", err);
 
 	int socket_servidor = socket(server_info->ai_family,
-                        server_info->ai_socktype,
-                        server_info->ai_protocol);
+								server_info->ai_socktype,
+								server_info->ai_protocol);
+
+	if (socket_servidor == -1) {
+    	perror("Error al crear el socket");
+    	freeaddrinfo(server_info);
+    	return -1;
+	}
 
 	// Asociamos el socket a un puerto
 	err = bind(socket_servidor, server_info->ai_addr, server_info->ai_addrlen);
 	
-	log_info(un_log, "resultado de bind: %d", err);
+	if (err == -1) {
+    	perror("Error en bind");
+    	close(socket_servidor);
+    	freeaddrinfo(server_info);
+    	return -1;
+	}
 
 	// Escuchamos las conexiones entrantes
 
 	err = listen(socket_servidor, SOMAXCONN);
-
-	log_info(un_log, "resultado de listen: %d", err);
-
-	log_info(un_log,"SERVER: %s",mensaje_servidor);
+	if (err == -1) {
+    	perror("Error en listen");
+    	close(socket_servidor);
+    	freeaddrinfo(server_info);
+    	return -1;
+	}
 
 	freeaddrinfo(server_info);
+
+    log_info(un_log, "SERVER: %s", mensaje_servidor);
 	
 	return socket_servidor;
 }
