@@ -7,25 +7,39 @@ int main(void) {
 
 	//INICIAR SERVER DE KERNNEL
 	fd_kernel = iniciar_servidor(PUERTO_ESCUCHA, kernel_logger, "KERNEL HA SIDO INICIADA");
+	if (fd_kernel == -1) {
+        log_error(kernel_logger, "No se pudo iniciar el servidor del kernel");
+        log_destroy(kernel_logger);
+        return EXIT_FAILURE;
+    }
 
 	//conectarse con memoria 
 	fd_memoria = crear_conexion(IP_MEMORIA, PUERTO_MEMORIA);
-	close(fd_memoria);
+	if (fd_memoria == -1) {
+        log_error(kernel_logger, "No se pudo conectar con la memoria");
+    }
 
 	//conectarse con cpu 
 	fd_cpu_dispatch = crear_conexion(IP_CPU, PUERTO_CPU_DISPATCH);
-	log_info(kernel_logger,"fd_cpu_dispatch: %d",fd_cpu_dispatch);
-	close(fd_cpu_dispatch);
+	if (fd_cpu_dispatch == -1) {
+        log_error(kernel_logger, "No se pudo conectar con CPU dispatch");
+    } else {
+        log_info(kernel_logger, "fd_cpu_dispatch: %d", fd_cpu_dispatch);
+    }
 
-	//log_info(kernel_logger, "Conexion con CPU DISPATCH exitosa");
 	fd_cpu_interrupt = crear_conexion(IP_CPU, PUERTO_CPU_INTERRUPT);
-	log_info(kernel_logger,"fd_cpu_interrupt: %d",fd_cpu_interrupt);\
-	close(fd_cpu_interrupt);
-
-	//log_info(kernel_logger, "Conexion con CPU INTERRUPT exitosa");
+	if (fd_cpu_interrupt == -1) {
+        log_error(kernel_logger, "No se pudo conectar con CPU interrupt");
+    } else {
+        log_info(kernel_logger, "fd_cpu_interrupt: %d", fd_cpu_interrupt);
+    }
 
 	//esperar conexion de entradasalida
+	log_info(kernel_logger, "ESPERANDO A ENTRADASALIDA");
 	fd_entradasalida = esperar_cliente(fd_kernel, kernel_logger, "Entrada y salida");
+	if (fd_entradasalida == -1) {
+        log_error(kernel_logger, "No se pudo aceptar la conexión de entrada y salida");
+    }
 
 	// //ATENDER MEMORIA
 	// pthread_t hilo_memoria;
@@ -46,6 +60,8 @@ int main(void) {
 	// pthread_t hilo_entradasalida;
 	// pthread_create(&hilo_entradasalida, NULL, (void*)atender_kernel_entradasalida, NULL);
 	// pthread_join(hilo_entradasalida, NULL);
+
+    log_destroy(kernel_logger);
 
 	return EXIT_SUCCESS;
 }

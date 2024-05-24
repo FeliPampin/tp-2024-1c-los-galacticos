@@ -15,7 +15,6 @@ int crear_conexion(char *ip, int puerto)
 	memset(&hints, 0, sizeof(hints));
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
 
 	int err = getaddrinfo(ip, puertostring, &hints, &server_info);
 
@@ -30,14 +29,16 @@ int crear_conexion(char *ip, int puerto)
                          server_info->ai_protocol);
 	// Ahora que tenemos el socket, vamos a conectarlo
 	
-	printf("\n\n%d\n\n", socket_cliente);
+	if (socket_cliente == -1) {
+        perror("Error al crear el socket");
+        freeaddrinfo(server_info);
+        return -1;
+    }
 
 	err = connect(socket_cliente, server_info->ai_addr, server_info->ai_addrlen);
 
-	printf("\n\n%d\n\n", err);
-
 	if (err == -1) {
-    	perror("Error al conectaaar");
+    	perror("Error al conectar");
 	} else {
     	printf("Conexión exitosa\n");
 	}
@@ -54,46 +55,49 @@ int iniciar_servidor(int puerto, t_log* un_log, char* mensaje_servidor)
 	sprintf(puertostring, "%d", puerto); 
 
 	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	hints.ai_flags = AI_PASSIVE;
+	hints.ai_family = AF_INET;			// IPv4
+	hints.ai_socktype = SOCK_STREAM;	// TCP
+	hints.ai_flags = AI_PASSIVE; 		// Para usar mi dirección IP
 
 	// Creamos el socket de escucha del servidor
 
 	//getaddrinfo(NULL, "4444", &hints, &server_info);
 	int err = getaddrinfo(NULL, puertostring, &hints, &server_info);
 
-	printf("\n\n%d\n\n", err);
+	if (err != 0) {
+        log_error(un_log, "Error en getaddrinfo: %s", gai_strerror(err));
+        return -1;
+    }
 
 	int socket_servidor = socket(server_info->ai_family,
 								server_info->ai_socktype,
 								server_info->ai_protocol);
 
 	if (socket_servidor == -1) {
-    	perror("Error al crear el socket");
-    	freeaddrinfo(server_info);
-    	return -1;
-	}
+        log_error(un_log, "Error al crear el socket: %s", strerror(errno));
+        freeaddrinfo(server_info);
+        return -1;
+    }
 
 	// Asociamos el socket a un puerto
 	err = bind(socket_servidor, server_info->ai_addr, server_info->ai_addrlen);
 	
 	if (err == -1) {
-    	perror("Error en bind");
-    	close(socket_servidor);
-    	freeaddrinfo(server_info);
-    	return -1;
-	}
+        log_error(un_log, "Error en bind: %s", strerror(errno));
+        close(socket_servidor);
+        freeaddrinfo(server_info);
+        return -1;
+    }
 
 	// Escuchamos las conexiones entrantes
 
 	err = listen(socket_servidor, SOMAXCONN);
 	if (err == -1) {
-    	perror("Error en listen");
-    	close(socket_servidor);
-    	freeaddrinfo(server_info);
-    	return -1;
-	}
+        log_error(un_log, "Error en listen: %s", strerror(errno));
+        close(socket_servidor);
+        freeaddrinfo(server_info);
+        return -1;
+    }
 
 	freeaddrinfo(server_info);
 
@@ -106,6 +110,12 @@ int esperar_cliente(int socket_servidor, t_log* un_log,char* msj)
 {
 	// Aceptamos un nuevo cliente
 	int socket_cliente = accept(socket_servidor, NULL, NULL);
+
+	if (socket_cliente == -1) {
+        log_error(un_log, "Error en accept: %s", strerror(errno));
+        return -1;
+    }
+	
 
 	log_info(un_log, "Se recibio conexion desde: %s",msj);
 

@@ -7,13 +7,20 @@ int main() {
     
     //conectarse con memoria 
     fd_memoria = crear_conexion(IP_MEMORIA, PUERTO_MEMORIA);
-	log_info(entradasalida_logger, "Conexion con MEMORIA exitosa");
-    close(fd_memoria);
+	if (fd_memoria == -1) {
+        log_error(entradasalida_logger, "No se pudo conectar con la memoria");
+    } else {
+        log_info(entradasalida_logger, "Conexión con MEMORIA exitosa");
+    }
 
     //conectarse con KERNEL
-	fd_kernel = crear_conexion(IP_KERNEL, PUERTO_KERNEL); //HAY ALGO RARO ACA, NO TENDRIA QUE SER FD_KERNEL, PQ ARRIBA DICE FD_MEMORIA
-	log_info(entradasalida_logger, "Conexion con KERNEL exitosa");
-    close(fd_kernel);
+	fd_kernel = crear_conexion(IP_KERNEL, PUERTO_KERNEL); 
+	if (fd_kernel == -1) {
+        log_error(entradasalida_logger, "No se pudo conectar con el kernel");
+    } else {
+        log_info(entradasalida_logger, "Conexión con KERNEL exitosa");
+    }
+
 
     // //ATENDER MEMORIA
     // pthread_t hilo_memoria;
@@ -24,7 +31,7 @@ int main() {
     // pthread_t hilo_kernel;
     // pthread_create(&hilo_kernel,NULL,atender_entradasalida_kernel,NULL);
     // pthread_join(hilo_kernel, NULL);
-
+    log_destroy(entradasalida_logger);
       
     return EXIT_SUCCESS;
 }
