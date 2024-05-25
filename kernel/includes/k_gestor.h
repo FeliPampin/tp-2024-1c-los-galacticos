@@ -1,8 +1,11 @@
+#ifndef K_GESTOR_H
+#define K_GESTOR_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <utils/hello.h>
 #include <pthread.h>
-
+#include <semaphore.h>
 
 extern t_log* kernel_logger;
 extern t_log* kernel_log_debug;
@@ -25,3 +28,5 @@ extern int QUANTUM;
 extern char** RECURSOS;
 extern char** INSTANCIAS_RECURSOS;
 extern int GRADO_MULTIPROGRAMACION;
+
+#endif

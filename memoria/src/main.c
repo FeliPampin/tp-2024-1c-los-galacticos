@@ -38,20 +38,20 @@ int main() {
     }
 
 	
-	// //ATENDER CPU
-	// pthread_t hilo_cpu;
-	// pthread_create(&hilo_cpu, NULL, (void*)atender_memoria_cpu, NULL);
-	// pthread_detach(hilo_cpu);
+	//ATENDER CPU
+	pthread_t hilo_cpu;
+	pthread_create(&hilo_cpu, NULL, (void*)atender_memoria_cpu, NULL);
+	pthread_detach(hilo_cpu);
 
-	// //ATENDER KERNEL
-	// pthread_t hilo_kernel;
-	// pthread_create(&hilo_kernel, NULL, (void*)atender_memoria_kernel, NULL);
-	// pthread_detach(hilo_kernel);
+	//ATENDER KERNEL
+	pthread_t hilo_kernel;
+	pthread_create(&hilo_kernel, NULL, (void*)atender_memoria_kernel, NULL);
+	pthread_detach(hilo_kernel);
 
-	// //ATENDER ENTRADA Y SALIDA
-	// pthread_t hilo_eys;
-	// pthread_create(&hilo_eys, NULL, (void*)atender_memoria_entradasalida, NULL);
-	// pthread_join(hilo_eys,NULL);
+	//ATENDER ENTRADA Y SALIDA
+	pthread_t hilo_eys;
+	pthread_create(&hilo_eys, NULL, (void*)atender_memoria_entradasalida, NULL);
+	pthread_join(hilo_eys,NULL);
 
 	//TERMINAR MEMORIA
 	

@@ -1,3 +1,6 @@
+#ifndef UTILS_HELLO_C_
+#define UTILS_HELLO_C_
+
 #include <utils/hello.h>
 
 void decir_hola(char* quien) {
@@ -121,150 +124,220 @@ int esperar_cliente(int socket_servidor, t_log* un_log,char* msj)
 
 	return socket_cliente;
 }
-// int recibir_operacion(int socket_cliente)
-// {
-// 	int cod_op;
-// 	if(recv(socket_cliente, &cod_op, sizeof(int), MSG_WAITALL) > 0)
-// 		return cod_op;
-// 	else
-// 	{
-// 		close(socket_cliente);
-// 		return -1;
-// 	}
-// }
+int recibir_operacion(int socket_cliente)
+{
+	int cod_op;
+	if(recv(socket_cliente, &cod_op, sizeof(int), MSG_WAITALL) > 0)
+		return cod_op;
+	else
+	{
+		close(socket_cliente);
+		return -1;
+	}
+}
 
-// t_buffer* crear_buffer(){
+t_buffer* crear_buffer(){
 
-// 	t_buffer* un_buffer = malloc(sizeof(t_buffer));
-// 	un_buffer -> size = 0;
-// 	un_buffer -> stream = NULL;
+	t_buffer* un_buffer = malloc(sizeof(t_buffer));
+	un_buffer -> size = 0;
+	un_buffer -> stream = NULL;
 	
-// 	return un_buffer;
-// }
+	return un_buffer;
+}
 
-// void* extraer_cosas_del_buffer(t_buffer* un_buffer){
-// 	if(un_buffer->size == 0){
-// 		printf("\n[ERROR] Al intentar extraer ");
-// 		exit(EXIT_FAILURE);
-// 	}
+void* extraer_cosas_del_buffer(t_buffer* un_buffer){
+	if(un_buffer->size == 0){
+		printf("\n[ERROR] Al intentar extraer ");
+		exit(EXIT_FAILURE);
+	}
 	
-// 	if(un_buffer->size < 0){
-//     	printf("\n[ERROR] El t_buffer tiene un size negativo");
-// 		exit(EXIT_FAILURE);	} 
+	if(un_buffer->size < 0){
+    	printf("\n[ERROR] El t_buffer tiene un size negativo");
+		exit(EXIT_FAILURE);	} 
 
-// 	int size_cosas;
-// 	memcpy(&size_cosas, un_buffer->stream, sizeof(int));
-// 	void* cosas = malloc(size_cosas);
-// 	memcpy(cosas, un_buffer->stream + sizeof(int), size_cosas);
+	int size_cosas;
+	memcpy(&size_cosas, un_buffer->stream, sizeof(int));
+	void* cosas = malloc(size_cosas);
+	memcpy(cosas, un_buffer->stream + sizeof(int), size_cosas);
 
-// 	int nuevo_size = un_buffer->size - sizeof(int) - size_cosas;
-// 	if(nuevo_size == 0){
-// 		un_buffer->size = 0;
-// 		free(un_buffer->stream);;
-// 		un_buffer->stream = NULL;
-// 		return cosas;
-// 	}
+	int nuevo_size = un_buffer->size - sizeof(int) - size_cosas;
+	if(nuevo_size == 0){
+		un_buffer->size = 0;
+		free(un_buffer->stream);;
+		un_buffer->stream = NULL;
+		return cosas;
+	}
 	
-// 	if(nuevo_size < 0){
-//     	printf("\n[ERROR] Buffer tiene un size negativo");
-// 		exit(EXIT_FAILURE);
-// 	} 
+	if(nuevo_size < 0){
+    	printf("\n[ERROR] Buffer tiene un size negativo");
+		exit(EXIT_FAILURE);
+	} 
 
-// 	void* nuevo_stream = malloc(nuevo_size);
-// 	memcpy(nuevo_stream, un_buffer->stream + sizeof(int) + size_cosas, nuevo_size);
-// 	free(un_buffer->stream);
-// 	un_buffer->size = nuevo_size;
-// 	un_buffer->stream = nuevo_stream;
+	void* nuevo_stream = malloc(nuevo_size);
+	memcpy(nuevo_stream, un_buffer->stream + sizeof(int) + size_cosas, nuevo_size);
+	free(un_buffer->stream);
+	un_buffer->size = nuevo_size;
+	un_buffer->stream = nuevo_stream;
 
-// 	return cosas;
-// }
+	return cosas;
+}
 
-// t_buffer* recibir_buffer(int conexion){
+t_buffer* recibir_buffer(int conexion){
 	
-// 	t_buffer* un_buffer = malloc(sizeof(t_buffer));
+	t_buffer* un_buffer = malloc(sizeof(t_buffer));
 
-// 	if(recv(conexion, &(un_buffer->size),sizeof(int),MSG_WAITALL)>0)
-// 	{
-// 		un_buffer->stream = malloc(un_buffer->size);
-// 		if(recv(conexion, un_buffer->stream, un_buffer->size, MSG_WAITALL)>0)
-// 		{
-// 			return un_buffer;
-// 		}
-// 		else
-// 		{
-// 			perror("Error al recibir el void* del buffer de la conexion");
-// 			exit(EXIT_FAILURE);
-// 		}
-// 	}else
-// 	{
-// 		perror("Error al recibir el tamanio del buffer de la conexion");
-// 		exit(EXIT_FAILURE);
-// 	}
-// 	return un_buffer;
-// }
-// void enviar_paquete(t_paquete* paquete, int conexion){
+	if(recv(conexion, &(un_buffer->size),sizeof(int),MSG_WAITALL)>0)
+	{
+		un_buffer->stream = malloc(un_buffer->size);
+		if(recv(conexion, un_buffer->stream, un_buffer->size, MSG_WAITALL)>0)
+		{
+			return un_buffer;
+		}
+		else
+		{
+			perror("Error al recibir el void* del buffer de la conexion");
+			exit(EXIT_FAILURE);
+		}
+	}else
+	{
+		perror("Error al recibir el tamanio del buffer de la conexion");
+		exit(EXIT_FAILURE);
+	}
+	return un_buffer;
+}
+void enviar_paquete(t_paquete* paquete, int conexion){
 	
-// 	void* a_enviar = serialzizar_paquete(paquete);
+	void* a_enviar = serializar_paquete(paquete);
 
-// 	int bytes = paquete->buffer->size + 2 * sizeof(int);
-// 	send(conexion, a_enviar, bytes, 0);
 
-// 	free(a_enviar);
-// }
+	int bytes = paquete->buffer->size + 2 * sizeof(int);
+	send(conexion, a_enviar, bytes, 0);
 
-// int extraer_int_buffer (t_buffer* un_buffer){
-// 	int* un_entero = extraer_cosas_del_buffer(un_buffer);
-// 	int valor_retorno = *un_entero;
-// 	free (un_entero);
-// 	return valor_retorno;
-// }
+	free(a_enviar);
+}
 
-// char* extraer_string_buffer(t_buffer* un_buffer){
+void cargar_int_al_buffer(t_buffer* un_buffer, int int_value){
+	cargar_cosas_al_buffer(un_buffer, &int_value, sizeof(int));
+}
+
+int extraer_int_buffer (t_buffer* un_buffer){
+	int* un_entero = extraer_cosas_del_buffer(un_buffer);
+	int valor_retorno = *un_entero;
+	free (un_entero);
+	return valor_retorno;
+}
+
+void cargar_uint32_al_buffer(t_buffer* un_buffer, uint32_t un_valor){
+	cargar_cosas_al_buffer(un_buffer, &un_valor, sizeof(uint32_t));
+}
+
+uint32_t extraer_uint32_del_buffer(t_buffer* un_buffer){
+	uint32_t* un_valor = extraer_cosas_del_buffer(un_buffer);
+    uint32_t valor_retorno = *un_valor;
+    free(un_valor);
+    return valor_retorno;
+}
+
+void cargar_string_al_buffer(t_buffer* un_buffer, char* un_string){
+	cargar_cosas_al_buffer(un_buffer, un_string, strlen(un_string)+1);
+}
+
+char* extraer_string_buffer(t_buffer* un_buffer){
 	
-// 	char* un_string = extraer_cosas_del_buffer(un_buffer);
-// 	return un_string;
-// }
+	char* un_string = extraer_cosas_del_buffer(un_buffer);
+	return un_string;
+}
 
-// void cargar_string_al_buffer(t_buffer* un_buffer, char* un_string){
-// 	cargar_cosas_al_buffer(un_buffer, un_string, strlen(un_string)+1);
-// }
+void cargar_cosas_al_buffer(t_buffer* un_buffer, void* una_cosa, int size_cosas){
+	if(un_buffer->size == 0){
+		un_buffer->stream = malloc(sizeof(int) + size_cosas);
+		memcpy (un_buffer->stream, &size_cosas, sizeof(int));
+		memcpy (un_buffer->stream + sizeof(int), una_cosa, size_cosas);
+	}
+	else{
+		un_buffer->stream = realloc(un_buffer->stream, un_buffer->size + sizeof(int) + size_cosas);
+		memcpy(un_buffer->stream + un_buffer->size, &size_cosas,sizeof(int));
+		memcpy(un_buffer->stream + un_buffer->size + sizeof(int), una_cosa,size_cosas);
+	}
 
-// void cargar_cosas_al_buffer(t_buffer* un_buffer, void* una_cosa, int size_cosas){
-// 	if(un_buffer->size == 0){
-// 		un_buffer->stream = malloc(sizeof(int) + size_cosas);
-// 		memcpy (un_buffer->stream, &size_cosas, sizeof(int));
-// 		memcpy (un_buffer->stream + sizeof(int), una_cosa, size_cosas);
-// 	}
-// 	else{
-// 		un_buffer->stream = realloc(un_buffer->stream, un_buffer->size + sizeof(int) + size_cosas);
-// 		memcpy(un_buffer->stream + un_buffer->size, &size_cosas,sizeof(int));
-// 		memcpy(un_buffer->stream + un_buffer->size + sizeof(int), una_cosa,size_cosas);
-// 	}
+	un_buffer->size += sizeof(int);
+	un_buffer->size += size_cosas;
+}
 
-// 	un_buffer->size += sizeof(int);
-// 	un_buffer->size += size_cosas;
-// }
-
-// void paquete(int conexion){
-// 	char* leido = NULL;
-// 	t_paquete* paquete = crear_paquete();
-
-// 	leido = readline("> ");
-// 	while(strcmp(leido,"") != 0){
-// 		agregar_a_paquete(paquete,leido,strlen(leido) + 1);
-// 		free(leido);
-// 		leido = readline("> ");
-// 	}
-// }
  
-// t_paquete* crear_super_paquete(op_code cod_op, t_buffer* un_buffer){
-// 	t_paquete* un_paquete = malloc(sizeof(t_paquete));
-// 	un_paquete->codigo_operacion = cod_op;
-// 	un_paquete->buffer = un_buffer;
-// 	return un_paquete;
-// }
+t_paquete* crear_paquete(op_code cod_op, t_buffer* un_buffer){
+	t_paquete* un_paquete = malloc(sizeof(t_paquete));
+	un_paquete->codigo_operacion = cod_op;
+	un_paquete->buffer = un_buffer;
+	return un_paquete;
+}
 
-// void destruir_paquete(t_paquete* un_paquete){
-// 	destruir_buffer(un_paquete->buffer);
-// 	free(un_paquete);	
-// }
+
+
+void* serializar_paquete(t_paquete* un_paquete){
+	int size_coso = un_paquete->buffer->size + 2 *sizeof(int);
+	void* coso = malloc(size_coso);
+	int desplazamiento = 0;
+
+	memcpy(coso + desplazamiento, &(un_paquete->codigo_operacion),sizeof(int));
+	desplazamiento += sizeof(int);
+	memcpy(coso + desplazamiento, &(un_paquete->buffer->size),sizeof(int));
+	desplazamiento += sizeof(int);
+	memcpy(coso + desplazamiento,un_paquete->buffer->stream,un_paquete->buffer->size);
+	desplazamiento += un_paquete->buffer->size;
+
+	return coso;
+}
+
+void destruir_buffer(t_buffer* un_buffer){
+	free(un_buffer->stream);
+	free(un_buffer->size);
+	free(un_buffer);
+}
+
+void destruir_paquete(t_paquete* un_paquete){
+	destruir_buffer(un_paquete->buffer);
+	free(un_paquete);
+}
+
+void recibir_mensaje(int socket_cliente)
+{
+	int size;
+	char* buffer = recibir_buffer(&size, socket_cliente);
+	log_info(logger, "Me llego el mensaje: %s", buffer);
+	free(buffer);
+}
+
+t_list* recibir_paquete(int socket_cliente)
+{
+	int size;
+	int desplazamiento = 0;
+	void * buffer;
+	t_list* valores = list_create();
+	int tamanio;
+
+	buffer = recibir_buffer(&size, socket_cliente);
+	while(desplazamiento < size)
+	{
+		memcpy(&tamanio, buffer + desplazamiento, sizeof(int));
+		desplazamiento+=sizeof(int);
+		char* valor = malloc(tamanio);
+		memcpy(valor, buffer+desplazamiento, tamanio);
+		desplazamiento+=tamanio;
+		list_add(valores, valor);
+	}
+	free(buffer);
+	return valores;
+}
+
+/*
+void agregar_a_paquete( t_paquete* paquete, void* valor, int tamanio){
+    paquete->buffer->stream = realloc(paquete->buffer->stream, paquete->buffer->size + tamanio + sizeof(int));
+
+    memcpy(paquete->buffer->stream + paquete->buffer->size, &tamanio, sizeof(int));
+    memcpy(paquete->buffer->stream + paquete->buffer->size + sizeof(int), valor, tamanio);
+
+    paquete->buffer->size += tamanio + sizeof(int);
+}*/
+
+#endif

@@ -22,15 +22,16 @@ int main() {
     }
 
 
-    // //ATENDER MEMORIA
-    // pthread_t hilo_memoria;
-    // pthread_create(&hilo_memoria,NULL,atender_entradasalida_memoria,NULL);
-    // pthread_detach(hilo_memoria);
+    //ATENDER MEMORIA
+    pthread_t hilo_memoria;
+    pthread_create(&hilo_memoria,NULL,atender_entradasalida_memoria,NULL);
+    pthread_detach(hilo_memoria);
 
-    // //ATENDER KERNEL
-    // pthread_t hilo_kernel;
-    // pthread_create(&hilo_kernel,NULL,atender_entradasalida_kernel,NULL);
-    // pthread_join(hilo_kernel, NULL);
+    //ATENDER KERNEL
+    pthread_t hilo_kernel;
+    pthread_create(&hilo_kernel,NULL,atender_entradasalida_kernel,NULL);
+    pthread_join(hilo_kernel, NULL);
+
     log_destroy(entradasalida_logger);
       
     return EXIT_SUCCESS;
